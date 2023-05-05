@@ -20,7 +20,6 @@ app.get('/pizza/:id',async(req,res)=>{
 
 app.post('/pizza',async(req,res)=>{
     try{
-        console.log("post pizza empieza")
         await pizzasServices.insert(req.body)
         res.status(200).json({message:'Pizza creada'});
     }   catch (error){
@@ -32,7 +31,7 @@ app.post('/pizza',async(req,res)=>{
 app.put('/pizza',async(req,res)=>{
     try{
         let resultado = await pizzasServices.update(req.body)
-        if(resultado !== 1) {console.log("OMAR, ALGO ANDA MAL"); res.status(500).json({message: "Hubo un error al actualizar la pizza"});}
+        if(resultado != 1) {res.status(500).json({message: "Hubo un error al actualizar la pizza"});}
         else res.status(200).json({message:'Pizza actualizada'});
     }   catch (error){
         console.error(error);

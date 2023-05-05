@@ -48,28 +48,26 @@ class pizzasServices{
     }
 
     static update = async (pizza) =>{
-        const {nombre,libreGluten,importe,descripcion} = pizza;
+        const {id,nombre,libreGluten,importe,descripcion} = pizza;
         let pool = await sql.connect(config);
         let result = await pool.request()
-        
-        request
-        .input("pId", sql.Int, id)
-        .input('pImporte', sql.Money, importe)
+        .input('pId', sql.Int, id)
+        .input('pNombre', sql.NVarChar(200), nombre)
+        .input('pLibreGluten', sql.Bit, libreGluten)
+        .input('pImporte', sql.Int, importe)
         .input('pDescripcion', sql.NVarChar(200), descripcion)
-        .query('UPDATE Pizza SET importe= pImporte, descripcion = pDescripcion WHERE id = pId');      
-        }
-        catch(error){
-            console.log(error);     
+        .query('UPDATE Pizzas SET importe = @pImporte, descripcion = @pDescripcion WHERE id = @pId');
+        return result.rowsAffected;   
     }
     
 
-    static deleteById = async (ID) =>{
+    static deleteById = async (id) =>{
         let rowsAffected = 0;
         try{
             let pool = await sql.connect(config);
             let result = await pool.request()
-            .input(pID, sql.Int, ID)
-            .query('DELETE FROM Pizzas WHERE ID = @pID');
+            .input('pId', sql.Int, id)
+            .query('DELETE FROM Pizzas WHERE id = @pId');
             rowsAffected = result.rowsAffected;
         }
         catch(error){
